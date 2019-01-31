@@ -1,0 +1,87 @@
+require 用来加载代码，而 exports 和 module.exports 则用来导出代码。
+
+var a = {name: 1};
+var b = a;
+
+console.log(a);
+console.log(b);
+
+b.name = 2;
+console.log(a);
+console.log(b);
+
+var b = {name: 3};
+console.log(a);
+console.log(b);
+
+运行 test.js 结果为：
+
+{ name: 1 }
+{ name: 1 }
+{ name: 2 }
+{ name: 2 }
+{ name: 2 }
+{ name: 3 }
+
+a 是一个对象，b 是对 a 的引用，即 a 和 b 指向同一块内存，所以前两个输出一样。当对 b 作修改时，即 a 和 b 指向同一块内存地址的内容发生了改变，所以 a 也会体现出来，所以第三四个输出一样。
+当 b 被覆盖时，b 指向了一块新的内存，a 还是指向原来的内存，所以最后两个输出不一样。
+
+module.exports 初始值为一个空对象 {}
+exports 是指向的 module.exports 的引用
+require() 返回的是 module.exports 而不是 exports
+
+export语句用于在创建JavaScript模块时，从模块中导出函数、对象或原始值，以便其他程序可以通过 import 语句使用它们。
+
+在export语句中使用default节
+如果要导出单个值或需要模块的回掉值，则可以使用默认导出： 
+
+// module "my-module.js"
+let cube = function cube(x) {
+  return x * x * x;
+}
+export default cube;
+然后，在另一个脚本中，默认导出将直接被导入：
+
+// module "my-module.js"
+import myFunction from 'my-module';
+console.log(myFunction(3)); // 27
+
+arguments 是一个对应于传递给函数的参数的类数组对象。
+arguments对象是所有（非箭头）函数中都可用的局部变量。你可以使用arguments对象在函数中引用函数的参数。此对象包含传递给函数的每个参数，第一个参数在索引0处。例如，如果一个函数传递了三个参数，你可以以如下方式引用他们：
+arguments[0]
+arguments[1]
+arguments[2]
+
+arguments[1] = 'new value';
+arguments对象不是一个 Array 。它类似于Array，但除了length属性和索引元素之外没有任何Array属性。例如，它没有 pop 方法。但是它可以被转换为一个真正的Array：
+
+var args = Array.prototype.slice.call(arguments);
+var args = [].slice.call(arguments);
+
+// ES2015
+const args = Array.from(arguments);
+
+对参数使用 typeof节
+typeof参数返回 'object'。
+
+console.log(typeof arguments);    // 'object'
+// arguments 对象只能在函数内使用
+function test(a){
+    console.log(a,Object.prototype.toString.call(arguments));
+    console.log(arguments[0],arguments[1]);
+    console.log(typeof arguments[0]);
+}
+test(1);
+/*
+1 "[object Arguments]"
+1 undefined
+number
+*/
+可以使用索引确定单个参数的类型。
+
+console.log(typeof arguments[0]); //this will return the typeof individual arguments.
+对参数使用扩展语法节
+您还可以使用Array.from()方法或扩展运算符将参数转换为真实数组：
+
+var args = Array.from(arguments);
+var args = [...arguments];
